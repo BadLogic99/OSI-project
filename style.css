@@ -1,0 +1,370 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #0a0f1f; /* ciemne kosmiczne tło */
+    color: #e0e6ff;
+    font-family: 'Trebuchet MS', Arial, sans-serif;
+    line-height: 1.6;
+}
+#main-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #0f1428; /* stały, ciemny kolor zamiast przezroczystości */
+    padding: 10px 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+#main-nav ul {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#main-nav a {
+    color: #89b4ff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+#main-nav a:hover {
+    color: #fff;
+    text-shadow: 0 0 10px #3c6bff;
+}
+
+
+header {
+    position: relative;
+    text-align: center;
+    padding: 60px 20px;
+    color: #89b4ff;
+    border-radius: 12px;
+    max-width: 900px;
+    margin: 30px auto;
+    background: radial-gradient(circle at center, #0f1428 0%, #000010 100%);
+    box-shadow: 0 0 30px rgba(120,150,255,0.3);
+    overflow: hidden;
+}
+
+header h1 {
+    font-size: 3em;
+    margin-bottom: 15px;
+    text-shadow:
+        0 0 5px #89b4ff,
+        0 0 10px #3c6bff,
+        0 0 20px #3c6bff,
+        0 0 40px #3c6bff;
+    animation: glowHeader 2s ease-in-out infinite alternate;
+}
+
+header p {
+    font-size: 1.3em;
+    color: #c0d5ff;
+    text-shadow: 0 0 3px #89b4ff;
+}
+
+/* animacja glow dla nagłówka */
+@keyframes glowHeader {
+    0% {
+        text-shadow: 0 0 5px #89b4ff, 0 0 10px #3c6bff, 0 0 20px #3c6bff, 0 0 40px #3c6bff;
+    }
+    50% {
+        text-shadow: 0 0 10px #a0c0ff, 0 0 20px #4a6bff, 0 0 40px #4a6bff, 0 0 80px #4a6bff;
+    }
+    100% {
+        text-shadow: 0 0 5px #89b4ff, 0 0 10px #3c6bff, 0 0 20px #3c6bff, 0 0 40px #3c6bff;
+    }
+}
+
+/* gwiazdki w tle nagłówka */
+.header-stars {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    background: url('gwiazdy.jpg') repeat;
+    background-size: cover;
+    opacity: 0.2;
+    animation: moveStars 60s linear infinite;
+}
+
+@keyframes moveStars {
+    0% { background-position: 0 0; }
+    100% { background-position: -2000px 1000px; } /* dowolny kierunek ruchu */
+}
+
+
+/* Dodanie lekkiego efektu gwiazd w tle */
+
+/* animowane tło gwiazd */
+body::before {
+    content: "";
+    position: fixed; /* fixed zamiast absolute, żeby tło się przesuwało cały czas */
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('gwiazdy.jpg') repeat;
+    background-size: auto;
+    opacity: 0.15;
+    transform: scale(0.98);
+    animation: moveStarsBody 180s linear infinite;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* animacja przesuwania gwiazd */
+@keyframes moveStarsBody {
+    0% { background-position: 0 0; }
+    100% { background-position: -2000px 1000px; }
+}
+
+
+#galeria {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+#galeria h2 {
+    color: #89b4ff;
+    text-shadow: 0 0 8px #3c6bff;
+    margin-bottom: 25px;
+}
+
+/* kontener galerii */
+.galeria-box {
+    position: relative;
+    width: 100%;
+    height: 500px; /* wysokość wszystkich zdjęć */
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(120,150,255,0.3);
+}
+
+/* wszystkie obrazki w jednym miejscu, ukryte poza aktualnym */
+.galeria-box img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    max-width: 100%;
+    max-height: 100%;
+    transform: translate(-50%, -50%);
+    border-radius: 12px;
+    display: none; /* domyślnie ukryte */
+    object-fit: cover; /* dopasowanie różnych wymiarów */
+}
+
+.solar-system-image {
+    text-align: center;
+    margin: 20px 0 40px 0;
+    grid-column: 1 / -1; /* nie jest konieczne, ale w razie czego “rozciąga” nad grid */
+}
+
+.solar-system-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(120, 150, 255, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.solar-system-image img:hover {
+    transform: scale(1.02);
+}
+
+#planety {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+#planety h2 {
+    grid-column: 1 / -1; /* zajmuje całą szerokość grida */
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #c6d7ff;
+}
+
+
+/* GRID NA KARTY PLANET */
+#planety {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+
+/* KARTA PLANETY */
+.planet {
+    background: rgba(15, 17, 30, 0.6);
+    border: 1px solid rgba(120, 140, 200, 0.2);
+    border-radius: 14px;
+    padding: 20px;
+    transition: transform .25s ease, box-shadow .25s ease;
+    backdrop-filter: blur(4px);
+}
+
+/* HOVER EFEKT */
+.planet:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 20px rgba(120, 150, 255, 0.4);
+}
+
+/* TYTUŁ PLANETY */
+.planet h3 {
+    text-align: center;
+    font-size: 1.3rem;
+    color: #90b2ff;
+    margin-bottom: 10px;
+}
+
+/* TEKST W KARCIE */
+.planet-info {
+    line-height: 1.4;
+    color: #dde2ff;
+    text-align: justify;
+    font-size: 0.95rem;
+}
+
+/* Sekcja najbliżsi sąsiedzi */
+#sasiedzi {
+    padding: 40px 20px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+#sasiedzi h2 {
+    text-align: center;
+    font-size: 2.4rem;
+    color: #89b4ff;
+    text-shadow: 0 0 8px #3c6bff;
+    margin-bottom: 40px;
+}
+
+/* Karty kosmicznych obiektów */
+.space-object {
+    background: rgba(20, 30, 60, 0.6);
+    border: 1px solid rgba(120, 160, 255, 0.3);
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(80, 120, 255, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.space-object:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 20px rgba(140, 180, 255, 0.6);
+    border-color: rgba(150, 190, 255, 0.7);
+}
+
+/* Nagłówki kart */
+.space-object h3 {
+    color: #a8c3ff;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+/* Tekst opisowy */
+.space-object p {
+    color: #d5ddff;
+    font-size: 1rem;
+}
+
+
+
+#kalkulator {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+#kalkulator h2 {
+    color: #89b4ff;
+    text-shadow: 0 0 8px #3c6bff;
+    margin-bottom: 30px;
+}
+
+.calc-box {
+    background: rgba(15, 20, 40, 0.6);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 0 15px rgba(120, 150, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.calc-box label {
+    text-align: left;
+    color: #d5ddff;
+}
+
+.calc-box input,
+.calc-box select,
+.calc-box button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(120,150,255,0.3);
+}
+
+.calc-box button {
+    background: #3c6bff;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.calc-box button:hover {
+    background: #5a85ff;
+}
+
+#wynik {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #a8c3ff;
+}
+
+#chatbot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 320px;
+    height: 450px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: Arial;
+}
+#chat-window {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+}
+#chat-input {
+    border: none;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    width: 100%;
+}
+button {
+    width: 100%;
+    border: none;
+    padding: 10px;
+    background: black;
+    color: white;
+    cursor: pointer;
+}

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Astronomia</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YS62KS9YTT"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YS62KS9YTT');
+    </script>
+    <meta property="og:title" content="Arctiss" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.imdb.com/title/tt0117500/" />
+    <meta property="og:image" content="https://thumbs.dreamstime.com/z/warrior-sparta-spartan-shield-meander-helmet-black-background-93259706.jpg" />
+    <meta property="og:description" content="Na stronie zupełnie nic nie działa - powstała jedynie aby zbierać dane i poddawać je analizie." />
+</head>
+
+
+<body onload="zmienObrazek()">
+
+<div class="stars"></div>
+
+<nav id="main-nav">
+    <ul>
+        <li><a href="#galeria">Galeria</a></li>
+        <li><a href="#planety">Układ słoneczny</a></li>
+        <li><a href="#sasiedzi">Sąsiedzi</a></li>
+        <li><a href="#kalkulator">Kalkulator</a></li>
+    </ul>
+</nav>
+
+<header>
+    <div class="header-stars"></div>
+    <h1>ASTRONOMIA I ASTROFIZYKA</h1>
+    <p>Interaktywna strona edukacyjna o kosmosie</p>
+</header>
+
+<section id="galeria">
+    <h2>Galeria</h2>
+    <div class="galeria-box">
+        <img id="galeria-img" src="kosmos1.png" alt="Kosmos 1">
+    </div>
+</section>
+
+
+<section id="planety">
+    <h2>Układ słoneczny</h2>
+    <div class="solar-system-image">
+        <img src="uklad sloneczny.webp" alt="Układ Słoneczny" />
+    </div>
+    <div class="planet" data-planet="merkury">
+        <h3>Merkury</h3>
+        <p class="planet-info">
+            Planeta ta przyczyniła się do zmiany naszej teorii dotyczącej grawitacji.
+            Ruch planety nie pokrywał się z wyliczeniami astronomów — na początku założono,
+            że sprawcą jest jeszcze jedna planeta bliżej Słońca.
+            Po latach okazało się, że to precesja peryhelium Merkurego była kluczowym
+            dowodem i inspiracją dla Alberta Einsteina przy tworzeniu ogólnej teorii względności.
+        </p>
+    </div>
+
+    <div class="planet" data-planet="wenus">
+        <h3>Wenus</h3>
+        <p class="planet-info">
+            Wenus posiada rotację wsteczną — obraca się w przeciwną stronę niż większość planet.
+            Przez lata badano przyczynę tego zjawiska, a najczęściej akceptowana teoria mówi
+            o potężnej kolizji z ciałem planetarnym we wczesnym Układzie Słonecznym.
+            Jej dzień trwa dłużej niż rok, co czyni ją jedną z najbardziej nietypowych planet.
+        </p>
+    </div>
+
+    <div class="planet" data-planet="ziemia">
+        <h3>Ziemia</h3>
+        <p class="planet-info">
+            Ziemia nie jest idealną kulą — jej kształt to geoid.
+            Dzięki satelitom potwierdzono spłaszczenie na biegunach i delikatne uwypuklenie na równiku.
+            Co ważne — zmiany rozkładu mas (np. topniejące lodowce) faktycznie wpływają na długość doby,
+            wydłużając ją o kilka milisekund na stulecie.
+        </p>
+    </div>
+
+    <div class="planet" data-planet="mars">
+        <h3>Mars</h3>
+        <p class="planet-info">
+            Mars posiada tzw. „dichotomię marsjańską” — północna półkula jest niska i gładka,
+            a południowa wyżynna i mocno pokryta kraterami.
+            Naukowcy debatują, czy powodem była gigantyczna kolizja proto-planety,
+            czy intensywna aktywność tektoniczna. To nierozwiązana zagadka,
+            która może pomóc zrozumieć ewolucję planet skalistych.
+        </p>
+    </div>
+    <div class="planet" data-planet="jowisz">
+        <h3>Jowisz</h3>
+        <p class="planet-info">
+            Jowisz jest największą planetą Układu Słonecznego — jego masa jest ponad dwa razy większa
+            niż łączna masa wszystkich innych planet. 
+            W XIX wieku astronomowie zauważyli jego ogromne oddziaływanie grawitacyjne na komety i asteroidy,
+            co doprowadziło do powstania teorii o tzw. „kosmicznym odkurzaczu”.
+            Jowisz chroni wewnętrzne planety, przechwytując lub wyrzucając wiele potencjalnie groźnych obiektów.
+        </p>
+    </div>
+
+    <div class="planet" data-planet="saturn">
+        <h3>Saturn</h3>
+        <p class="planet-info">
+            Słynie z pierścieni, ale naukowcy odkryli, że są one stosunkowo młode — mają zaledwie około 100 milionów lat,
+            co jest „niczym” w skali Układu Słonecznego.
+            Najnowsze badania sugerują, że pierścienie mogły powstać z rozbitego księżyca,
+            który został rozerwany przez siły pływowe Saturna.
+            Obecnie pierścienie powoli zanikają — w przyszłości całkowicie znikną, spadając na planetę.
+        </p>
+    </div>
+
+    <div class="planet" data-planet="uran">
+        <h3>Uran</h3>
+        <p class="planet-info">
+            Uran jest gigantem lodowym o bardzo nietypowym nachyleniu osi — jest praktycznie „na boku”.
+            Planeta wiruje jak kula, która się przewróciła. 
+            Według obecnej teorii Uran został silnie uderzony przez ciało wielkości Ziemi
+            podczas formowania Układu Słonecznego, co obróciło go o ponad 90°.
+            To ekstremalne nachylenie powoduje, że Uran ma najdłuższe i najbardziej skrajne pory roku spośród wszystkich planet.
+        </p>
+    </div>
+
+    <div class="planet" data-planet="neptun">
+        <h3>Neptun</h3>
+        <p class="planet-info">
+            Neptun jako jedyna planeta w historii został odkryty „na papierze” — matematycznie,
+            zanim ktokolwiek go zobaczył. 
+            Zaburzenia w ruchu Urana wskazywały, że musi istnieć jeszcze jedna planeta,
+            co w 1846 roku doprowadziło do jej odnalezienia.
+            Neptun słynie z najsilniejszych wiatrów w Układzie Słonecznym — osiągają nawet 2100 km/h,
+            co jest bliskie granicy dźwięku w jego atmosferze.
+        </p>
+    </div>
+
+    <div class="planet" data-planet="pluton">
+        <h3>Pluton</h3>
+        <p class="planet-info">
+            Pluton został zdegradowany do statusu planety karłowatej w 2006 roku przez Międzynarodową Unię Astronomiczną.
+            Powodem nie było jego „małe znaczenie”, lecz fakt, że nie spełnia jednego kluczowego kryterium:
+            nie oczyścił swojej orbity z innych obiektów pasa Kuipera.
+            Mimo to Pluton wciąż fascynuje — sonda New Horizons ujawniła, że posiada lodowe góry,
+            azotową atmosferę i geologicznie aktywne powierzchnie.
+        </p>
+    </div>
+</section>
+<section id="sasiedzi">
+    <h2>Najbliżsi sąsiedzi kosmiczni</h2>
+
+    <div class="space-object">
+        <h3>Najbliższa gwiazda – Proxima Centauri</h3>
+        <p>
+            Proxima Centauri znajduje się około 4.24 lat świetlnych od Ziemi. 
+            Jest czerwonym karłem o niestabilnej aktywności — częste rozbłyski mogą uniemożliwiać istnienie życia
+            na jej planetach. W 2016 r. potwierdzono istnienie planety Proxima b, znajdującej się w strefie życia.
+        </p>
+    </div>
+
+    <div class="space-object">
+        <h3>Najbliższa gwiazda neutronowa – RX J1856.5−3754</h3>
+        <p>
+            RX J1856.5−3754 leży około 400 lat świetlnych od Ziemi i jest jednym z tzw. „Siedmiu Wspaniałych” —
+            grupy izolowanych gwiazd neutronowych dobrze widocznych w promieniach rentgenowskich.
+            Jej rozmiar to zaledwie ~20 km średnicy, ale masa jest większa niż masa Słońca.
+        </p>
+    </div>
+
+    <div class="space-object">
+        <h3>Najbliższa czarna dziura – Gaia BH1</h3>
+        <p>
+            Gaia BH1 znajduje się ok. 1560 lat świetlnych od Ziemi w gwiazdozbiorze Wężownika.
+            Jest to najbliższa nam znana czarna dziura o masie około 10 mas Słońca
+            i — co zaskakujące — krąży wokół niej zwykła gwiazda podobna do Słońca.
+            To pierwsza czarna dziura wykryta wyłącznie poprzez analizę ruchu jej towarzysza.
+        </p>
+    </div>
+
+    <div class="space-object">
+        <h3>Najbliższa duża galaktyka – Andromeda (M31)</h3>
+        <p>
+            Galaktyka Andromedy oddalona jest o około 2.5 miliona lat świetlnych.
+            Jest większa od Drogi Mlecznej i porusza się w naszym kierunku.
+            Za około 4 miliardy lat obie galaktyki zderzą się,
+            tworząc jedną ogromną strukturę nazwaną przez astronomów „Milkomedą”.
+        </p>
+    </div>
+
+</section>
+<section id="kalkulator">
+    <h2>Kalkulator podróży kosmicznej</h2>
+
+    <div class="calc-box">
+        <label for="cel">Wybierz obiekt docelowy:</label>
+        <select id="cel">
+            <option value="merkury">Merkury</option>
+            <option value="wenus">Wenus</option>
+            <option value="ziemia">Ziemia</option>
+            <option value="mars">Mars</option>
+            <option value="jowisz">Jowisz</option>
+            <option value="saturn">Saturn</option>
+            <option value="uran">Uran</option>
+            <option value="neptun">Neptun</option>
+            <option value="pluton">Pluton</option>
+            <option value="proxima">Proxima Centauri</option>
+            <option value="rx1856">RX J1856.5−3754</option>
+            <option value="gaia">Gaia BH1</option>
+            <option value="andromeda">Andromeda</option>
+            <option value="sagA">Sagittarius A*</option>
+        </select>
+
+        <label for="procent">Prędkość (% C, 0-100):</label>
+        <input type="number" id="procent" min="0" max="200" value="10">
+
+        <label for="kmh">Prędkość w km/h:</label>
+        <input type="number" id="kmh" min="0" value="0">
+
+        <label for="ms">Prędkość w m/s:</label>
+        <input type="number" id="ms" min="0" value="0">
+
+        <button id="licz">Oblicz czas podróży</button>
+
+        <p id="wynik"></p>
+    </div>
+</section>
+
+<div id="chatbot">
+    <input id="chat-input" type="text" placeholder="Napisz coś..." />
+    <div id="chat-window"></div>
+    <button onclick="sendMessage()">Wyślij</button>
+</div>
+
+<script>
+async function sendMessage() {
+    const userText = document.getElementById("chat-input").value;
+    if (!userText.trim()) return;
+
+    const log = document.getElementById("chat-window");
+    log.innerHTML += "<p><b>Ty:</b> " + userText + "</p>";
+
+    try {
+        const response = await fetch("/.netlify/functions/chatbot", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contents: [{ role: "user", parts: [{ text: userText }] }]
+            })
+        });
+
+        const data = await response.json();
+
+        const botMessage = data.candidates?.[0]?.content?.parts?.[0]?.text || "Brak odpowiedzi.";
+        log.innerHTML += "<p><b>ChatBot:</b> " + botMessage + "</p>";
+        document.getElementById("chat-input").value = "";
+    } catch (err) {
+        console.error(err);
+        log.innerHTML += "<p><b>ChatBot:</b> Błąd połączenia</p>";
+    }
+}
+
+
+// ======= MINI-GALERIA =======
+const obrazki = [
+    'kosmos1.png',
+    'kosmos2.png',
+    'kosmos3.png',
+    'kosmos4.png',
+    'kosmos5.png',
+    'kosmos6.png'
+];
+
+let index = 0;
+const imgElement = document.getElementById('galeria-img');
+
+// pokaż pierwszy obraz od razu
+imgElement.src = obrazki[0];
+imgElement.style.display = 'block';
+
+function zmienObrazek() {
+    imgElement.style.opacity = 0; // fade-out
+    setTimeout(() => {
+        imgElement.src = obrazki[index];
+        imgElement.style.opacity = 1; // fade-in
+        index = (index + 1) % obrazki.length;
+    }, 300);
+}
+
+setInterval(() => {
+    index = (index + 1) % obrazki.length;
+    zmienObrazek();
+}, 15000);
+
+// ======= KALKULATOR PODRÓŻY =======
+const dystanse = {
+    merkury: 91700000,
+    wenus: 41400000,
+    ziemia: 0,
+    mars: 78300000,
+    jowisz: 628730000,
+    saturn: 1275000000,
+    uran: 2723950000,
+    neptun: 4351400000,
+    pluton: 5906400000,
+    proxima: 4.24 * 9.461e12,
+    rx1856: 400 * 9.461e12,
+    gaia: 1560 * 9.461e12,
+    andromeda: 2.5e6 * 9.461e12,
+    sagA: 26000 * 9.461e12
+};
+
+function formatCzasH(czasH) {
+    if (czasH < 24) return `${czasH.toFixed(2)} godzin`;
+    const czasD = czasH / 24;
+    if (czasD < 365.25) return `${czasD.toFixed(2)} dni`;
+    const czasLata = czasD / 365.25;
+    return `${czasLata.toFixed(2)} lat`;
+}
+
+document.getElementById('licz').addEventListener('click', () => {
+    const cel = document.getElementById('cel').value;
+    let procentC = parseFloat(document.getElementById('procent').value);
+    let kmh = parseFloat(document.getElementById('kmh').value);
+    let ms = parseFloat(document.getElementById('ms').value);
+
+    const C = 299792.458; // km/s
+
+    // Jeśli %C > 0, przeliczamy na km/h
+    if (procentC > 0) {
+        ms = (C * procentC / 100) * 1000; // m/s
+        kmh = ms * 3.6;
+    } else if (kmh > 0) {
+        ms = kmh / 3.6;
+        procentC = (ms / (C * 1000)) * 100;
+    } else if (ms > 0) {
+        kmh = ms * 3.6;
+        procentC = (ms / (C * 1000)) * 100;
+    }
+
+    const dystans = dystanse[cel]; // km
+    const czasH = dystans / kmh; // godziny
+
+    let wynikTekst = `Czas podróży do ${cel.charAt(0).toUpperCase() + cel.slice(1)}: ${formatCzasH(czasH)}`;
+
+    if (procentC > 100) {
+        wynikTekst += " (hipotetycznie, podróż z prędkością większą od prędkości światła nie jest możliwa)";
+    }
+
+    document.getElementById('wynik').textContent = wynikTekst;
+});
+</script>
+
+</body>
+</html>
