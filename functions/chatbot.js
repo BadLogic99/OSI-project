@@ -1,50 +1,67 @@
-import fetch from "node-fetch"; // konieczne w Netlify Functions
+// netlify/functions/chatbot.js
 
-export async function handler(event, context) {
+exports.handler = async function(event, context) {
+  // 1. Obsługa CORS (żeby strona mogła gadać z funkcją)
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS"
+  };
+
+  // Obsługa pre-flight request (dla przeglądarek)
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 200, headers, body: "OK" };
+  }
+
   try {
-    // Pobranie danych z requestu
+    // 2. Pobranie wiadomości od użytkownika
+    if (!event.body) {
+      return { statusCode: 400, headers, body: JSON.stringify({ error: "Pusty request" }) };
+    }
+    
     const body = JSON.parse(event.body);
+    const userMessage = body.message; // Oczekujemy { "message": "treść" }
 
-    // Sprawdź, czy jest text od użytkownika
-    if (!body.contents || !body.contents[0]?.parts) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: "Brak danych do wysłania" }),
-      };
+    if (!userMessage) {
+      return { statusCode: 400, headers, body: JSON.stringify({ error: "Brak wiadomości" }) };
     }
 
-    const userText = body.contents[0].parts[0].text;
+    // 3. Konfiguracja Gemini API
+    // Klucz pobieramy ze zmiennych środowiskowych Netlify (nie wpisuj go tutaj!)
+    const API_KEY = process.env.GOOGLE_API_KEY; 
+    const URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
-    // API Google Gemini
-    const API_KEY = "TU_WKLEJ_SWÓJ_KLUCZ_API"; // <--- wklej tutaj swój klucz
-    const MODEL = "gemini-1.5-flash";
-
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: {
-            text: userText
-          },
-          temperature: 0.7,
-          candidateCount: 1
-        })
-      }
-    );
+    // 4. Zapytanie do Google (bez node-fetch, używamy wbudowanego fetch)
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{ text: `Jesteś edukacyjnym asystentem astronomicznym. Odpowiadaj krótko i ciekawie po polsku. Pytanie: ${userMessage}` }]
+        }]
+      })
+    });
 
     const data = await response.json();
 
+    // 5. Wyciągnięcie odpowiedzi
+    let botReply = "Błąd API Google.";
+    if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+      botReply = data.candidates[0].content.parts[0].text;
+    }
+
     return {
       statusCode: 200,
-      body: JSON.stringify(data),
+      headers,
+      body: JSON.stringify({ reply: botReply }),
     };
-  } catch (err) {
-    console.error(err);
+
+  } catch (error) {
+    console.error("Błąd funkcji:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Błąd serwera" }),
+      headers,
+      body: JSON.stringify({ error: "Błąd serwera: " + error.message }),
     };
   }
-}
+};

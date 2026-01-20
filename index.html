@@ -237,42 +237,41 @@
 
 <script>
 async function sendMessage() {
-  const input = document.getElementById("chat-input");
-  const log = document.getElementById("chat-window");
-  const text = input.value.trim();
+    const input = document.getElementById("chat-input");
+    const log = document.getElementById("chat-window");
+    const text = input.value.trim();
 
-  if (!text) return;
+    if (!text) return;
 
-  log.innerHTML += `<p><b>Ty:</b> ${text}</p>`;
-  input.value = "";
+    // Wyświetl wiadomość użytkownika
+    log.innerHTML += `<div style="margin: 5px 0; text-align: right;"><span style="background: #007bff; color: white; padding: 5px 10px; border-radius: 10px;">Ty: ${text}</span></div>`;
+    input.value = "";
+    
+    // Auto-scroll w dół
+    log.scrollTop = log.scrollHeight;
 
-  try {
-    const response = await fetch(
-      "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium",
-      {
-        method: "POST",
-        headers: {
-          "Authorization": "Bearer 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",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          inputs: text
-        })
-      }
-    );
+    try {
+        // Łączymy się z Twoją funkcją Netlify
+        // Ścieżka relatywna zadziała po wrzuceniu na Netlify
+        const response = await fetch('/.netlify/functions/chatbot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text })
+        });
 
-    const data = await response.json();
+        const data = await response.json();
+        
+        // Wyświetl odpowiedź bota
+        const botText = data.reply || "Coś poszło nie tak...";
+        log.innerHTML += `<div style="margin: 5px 0; text-align: left;"><span style="background: #444; color: white; padding: 5px 10px; border-radius: 10px;">AstroBot: ${botText}</span></div>`;
 
-    const reply =
-      data?.generated_text ||
-      data?.[0]?.generated_text ||
-      "Nie mam teraz odpowiedzi 🤖";
-
-    log.innerHTML += `<p><b>Chatbot:</b> ${reply}</p>`;
-  } catch (err) {
-    console.error(err);
-    log.innerHTML += `<p><b>Chatbot:</b> Błąd połączenia z modelem IA</p>`;
-  }
+    } catch (e) {
+        console.error(e);
+        log.innerHTML += `<div style="color: red;">Błąd połączenia z serwerem.</div>`;
+    }
+    
+    // Auto-scroll w dół
+    log.scrollTop = log.scrollHeight;
 }
 
 
