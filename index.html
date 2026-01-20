@@ -229,14 +229,27 @@
     </div>
 </section>
 
-<div id="chatbot">
-    <div id="chat-window">
-        <div class="message bot-message">Witaj! O co chcesz zapytać?</div>
-    </div>
-    
-    <div class="chat-input-area">
-        <input id="chat-input" type="text" placeholder="Nadaj komunikat..." onkeypress="handleKeyPress(event)" />
-        <button id="chat-send-btn" onclick="sendMessage()">Start</button>
+<div id="chat-wrapper">
+    <button id="chat-toggle" onclick="toggleChat()">
+        💬
+    </button>
+
+    <div id="chat-container" class="hidden">
+        <div id="chat-header">
+            <span>Asystent AI</span>
+            <button id="close-chat" onclick="toggleChat()">✖</button>
+        </div>
+        
+        <div id="chat-window">
+            <div style="text-align: center; color: #888; font-size: 0.9em; margin-top: 20px;">
+                W czym mogę pomóc? 🚀
+            </div>
+        </div>
+
+        <div id="chat-input-area">
+            <input id="chat-input" type="text" placeholder="Napisz wiadomość..." onkeypress="handleEnter(event)" />
+            <button id="send-btn" onclick="sendMessage()">➤</button>
+        </div>
     </div>
 </div>
 

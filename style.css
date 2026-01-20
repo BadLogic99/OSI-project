@@ -335,189 +335,145 @@ body::before {
     color: #a8c3ff;
 }
 
-Jasne, to bardzo słuszne podejście. Przeanalizowałem Twój plik CSS (kolory #0a0f1f, #3c6bff, #89b4ff, czcionkę Trebuchet MS oraz efekty backdrop-filter i box-shadow).
-
-Poniższy kod CSS jest ściśle dopasowany do Twojego stylu "kosmicznego". Zamiast białego pudełka, robimy półprzezroczysty panel (glassmorphism), używamy Twoich gradientów i kolorów akcentujących.
-
-Instrukcja:
-W pliku style.css usuń stary fragment dotyczący #chatbot (ten na samym dole).
-
-Wklej w to miejsce poniższy kod.
-
-CSS
-
 /* =========================================
    KOSMICZNY CHATBOT - STYL DEDYKOWANY
    ========================================= */
 
-#chatbot {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 340px;
-    height: 480px; /* Nieco wyższy dla lepszej czytelności */
-    
-    /* Tło pasujące do .planet i .space-object (półprzezroczysty granat) */
-    background: rgba(15, 20, 40, 0.95);
-    
-    /* Rozmycie tła pod spodem (glassmorphism) */
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    
-    /* Obramowanie i cień jak w sekcji #galeria czy header */
-    border: 1px solid rgba(120, 160, 255, 0.3);
-    border-radius: 14px;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.7), 0 0 10px rgba(60, 107, 255, 0.2);
-    
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    font-family: 'Trebuchet MS', Arial, sans-serif; /* Twoja czcionka */
-    z-index: 9999;
-    transition: transform 0.3s ease;
-}
+/* Kontener całości - pozycjonowanie nie jest tu konieczne, ale porządkuje kod */
+    #chat-wrapper {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        font-family: sans-serif;
+    }
 
-/* Okno z wiadomościami */
-#chat-window {
-    flex: 1;
-    padding: 15px;
-    overflow-y: auto;
-    background: transparent;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
+    /* Bąbelek (przycisk) */
+    #chat-toggle {
+        background: #007bff; /* Kolor przycisku */
+        color: white;
+        border: none;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        font-size: 30px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        transition: transform 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-/* Personalizacja paska przewijania (żeby nie był biały) */
-#chat-window::-webkit-scrollbar {
-    width: 8px;
-}
-#chat-window::-webkit-scrollbar-track {
-    background: rgba(0,0,0,0.3);
-}
-#chat-window::-webkit-scrollbar-thumb {
-    background: #3c6bff; /* Twój kolor akcentu */
-    border-radius: 4px;
-}
+    #chat-toggle:hover {
+        transform: scale(1.1);
+    }
 
-/* --- Dymki wiadomości --- */
-.message {
-    max-width: 85%;
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    word-wrap: break-word;
-    animation: fadeIn 0.3s ease;
-    color: #e0e6ff; /* Twój główny kolor tekstu */
-}
+    /* Okno chatu */
+    #chat-container {
+        position: absolute;
+        bottom: 80px; /* Nad przyciskiem */
+        right: 0;
+        width: 350px;
+        height: 450px;
+        background: #1e1e1e; /* Ciemne tło */
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid #333;
+        transition: opacity 0.3s, transform 0.3s;
+    }
 
-/* Wiadomość użytkownika - Twój kolor przycisków (#3c6bff) */
-.user-message {
-    align-self: flex-end;
-    background: linear-gradient(135deg, #3c6bff, #5a85ff);
-    color: #fff;
-    border-bottom-right-radius: 2px;
-    box-shadow: 0 2px 10px rgba(60, 107, 255, 0.3);
-}
+    /* Klasa do ukrywania okna */
+    #chat-container.hidden {
+        display: none;
+        opacity: 0;
+        transform: translateY(20px);
+    }
 
-/* Wiadomość bota - Ciemniejsza, z obramowaniem jak .planet */
-.bot-message {
-    align-self: flex-start;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(120, 160, 255, 0.2);
-    border-bottom-left-radius: 2px;
-}
+    /* Nagłówek okna */
+    #chat-header {
+        background: #007bff;
+        color: white;
+        padding: 15px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-/* Wiadomość błędu */
-.error-message {
-    align-self: center;
-    background: rgba(255, 50, 50, 0.2);
-    border: 1px solid rgba(255, 50, 50, 0.5);
-    color: #ffcccc;
-    text-align: center;
-}
+    #close-chat {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
 
-/* --- Dolna sekcja (Input + Przycisk) --- */
-.chat-input-area {
-    display: flex;
-    padding: 12px;
-    background: rgba(10, 15, 31, 0.95);
-    border-top: 1px solid rgba(120, 160, 255, 0.2);
-    gap: 8px;
-}
+    /* Obszar wiadomości */
+    #chat-window {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background: #222;
+        color: #ddd;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
 
-/* Pole tekstowe */
-#chat-input {
-    flex: 1;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(120, 150, 255, 0.3);
-    color: #e0e6ff;
-    padding: 10px 12px;
-    border-radius: 8px;
-    outline: none;
-    font-family: inherit;
-    transition: 0.3s;
-}
+    /* Obszar wpisywania */
+    #chat-input-area {
+        padding: 10px;
+        background: #333;
+        display: flex;
+        gap: 10px;
+    }
 
-#chat-input:focus {
-    border-color: #89b4ff;
-    box-shadow: 0 0 8px rgba(137, 180, 255, 0.3);
-}
+    #chat-input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 20px;
+        border: 1px solid #555;
+        background: #444;
+        color: white;
+        outline: none;
+    }
 
-#chat-input::placeholder {
-    color: rgba(137, 180, 255, 0.5);
-}
+    #send-btn {
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        font-size: 18px;
+    }
 
-/* Przycisk wysyłania - styl z .calc-box button */
-#chat-send-btn {
-    width: auto;
-    background: #3c6bff;
-    color: white;
-    border: none;
-    padding: 0 20px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-    text-shadow: 0 0 5px rgba(0,0,0,0.5);
-}
+    #send-btn:hover {
+        background: #0056b3;
+    }
 
-#chat-send-btn:hover {
-    background: #5a85ff;
-    box-shadow: 0 0 15px rgba(60, 107, 255, 0.6);
-}
+    /* Style wiadomości (dymki) */
+    .msg-user {
+        align-self: flex-end;
+        background: #007bff;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 15px 15px 0 15px;
+        max-width: 80%;
+        word-wrap: break-word;
+    }
 
-/* --- Animacja kropek (...) --- */
-.loading-dots {
-    align-self: flex-start;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(120, 160, 255, 0.2);
-    padding: 12px 16px;
-    border-radius: 12px;
-    border-bottom-left-radius: 2px;
-    display: flex;
-    gap: 5px;
-    width: fit-content;
-}
-
-.dot {
-    width: 6px;
-    height: 6px;
-    background: #89b4ff; /* Kolor nagłówków */
-    border-radius: 50%;
-    animation: pulseDots 1.4s infinite ease-in-out both;
-}
-
-.dot:nth-child(1) { animation-delay: -0.32s; }
-.dot:nth-child(2) { animation-delay: -0.16s; }
-
-@keyframes pulseDots {
-    0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
-    40% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+    .msg-bot {
+        align-self: flex-start;
+        background: #444;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 15px 15px 15px 0;
+        max-width: 80%;
+        word-wrap: break-word;
+    }
