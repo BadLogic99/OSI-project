@@ -230,9 +230,14 @@
 </section>
 
 <div id="chatbot">
-    <input id="chat-input" type="text" placeholder="Napisz coś..." />
-    <div id="chat-window"></div>
-    <button onclick="sendMessage()">Wyślij</button>
+    <div id="chat-window">
+        <div class="message bot-message">Witaj! O co chcesz zapytać?</div>
+    </div>
+    
+    <div class="chat-input-area">
+        <input id="chat-input" type="text" placeholder="Nadaj komunikat..." onkeypress="handleKeyPress(event)" />
+        <button id="chat-send-btn" onclick="sendMessage()">Start</button>
+    </div>
 </div>
 
 <script>
