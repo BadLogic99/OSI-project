@@ -243,16 +243,14 @@ async function sendMessage() {
 
     if (!text) return;
 
-    // Wyświetl wiadomość użytkownika
+    // Twoja wiadomość
     log.innerHTML += `<div style="margin: 5px 0; text-align: right;"><span style="background: #007bff; color: white; padding: 5px 10px; border-radius: 10px;">Ty: ${text}</span></div>`;
     input.value = "";
     
-    // Auto-scroll w dół
+    // Scroll w dół
     log.scrollTop = log.scrollHeight;
 
     try {
-        // Łączymy się z Twoją funkcją Netlify
-        // Ścieżka relatywna zadziała po wrzuceniu na Netlify
         const response = await fetch('/.netlify/functions/chatbot', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -260,17 +258,17 @@ async function sendMessage() {
         });
 
         const data = await response.json();
-        
-        // Wyświetl odpowiedź bota
         const botText = data.reply || "Coś poszło nie tak...";
-        log.innerHTML += `<div style="margin: 5px 0; text-align: left;"><span style="background: #444; color: white; padding: 5px 10px; border-radius: 10px;">AstroBot: ${botText}</span></div>`;
+        
+        // ZMIANA TUTAJ: Zamiast "AstroBot" jest "ChatBot"
+        log.innerHTML += `<div style="margin: 5px 0; text-align: left;"><span style="background: #444; color: white; padding: 5px 10px; border-radius: 10px;">ChatBot: ${botText}</span></div>`;
 
     } catch (e) {
         console.error(e);
         log.innerHTML += `<div style="color: red;">Błąd połączenia z serwerem.</div>`;
     }
     
-    // Auto-scroll w dół
+    // Scroll w dół po odpowiedzi
     log.scrollTop = log.scrollHeight;
 }
 
