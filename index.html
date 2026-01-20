@@ -237,30 +237,42 @@
 
 <script>
 async function sendMessage() {
-    const userText = document.getElementById("chat-input").value;
-    if (!userText.trim()) return;
+  const input = document.getElementById("chat-input");
+  const log = document.getElementById("chat-window");
+  const text = input.value.trim();
 
-    const log = document.getElementById("chat-window");
-    log.innerHTML += "<p><b>Ty:</b> " + userText + "</p>";
+  if (!text) return;
 
-    try {
-        const response = await fetch("/.netlify/functions/chatbot", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                contents: [{ role: "user", parts: [{ text: userText }] }]
-            })
-        });
+  log.innerHTML += `<p><b>Ty:</b> ${text}</p>`;
+  input.value = "";
 
-        const data = await response.json();
+  try {
+    const response = await fetch(
+      "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": "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",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          inputs: text
+        })
+      }
+    );
 
-        const botMessage = data.candidates?.[0]?.content?.parts?.[0]?.text || "Brak odpowiedzi.";
-        log.innerHTML += "<p><b>ChatBot:</b> " + botMessage + "</p>";
-        document.getElementById("chat-input").value = "";
-    } catch (err) {
-        console.error(err);
-        log.innerHTML += "<p><b>ChatBot:</b> Błąd połączenia</p>";
-    }
+    const data = await response.json();
+
+    const reply =
+      data?.generated_text ||
+      data?.[0]?.generated_text ||
+      "Nie mam teraz odpowiedzi 🤖";
+
+    log.innerHTML += `<p><b>Chatbot:</b> ${reply}</p>`;
+  } catch (err) {
+    console.error(err);
+    log.innerHTML += `<p><b>Chatbot:</b> Błąd połączenia z modelem IA</p>`;
+  }
 }
 
 
