@@ -1,6 +1,7 @@
-// netlify/functions/chatbot.js - WERSJA DO DIAGNOZY
+// netlify/functions/chatbot.js
 
 exports.handler = async function(event, context) {
+  // Nagłówki CORS
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type",
@@ -19,13 +20,13 @@ exports.handler = async function(event, context) {
     const body = JSON.parse(event.body);
     const userMessage = body.message;
     
-    // Sprawdzamy czy klucz w ogóle istnieje
     const API_KEY = process.env.GOOGLE_API_KEY;
     if (!API_KEY) {
-        return { statusCode: 500, headers, body: JSON.stringify({ reply: "BŁĄD KONFIGURACJI: Brak zmiennej GOOGLE_API_KEY w Netlify!" }) };
+        return { statusCode: 500, headers, body: JSON.stringify({ reply: "BŁĄD: Brak klucza API w Netlify." }) };
     }
 
-    const URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+    // ZMIANA TUTAJ: Używamy "gemini-pro" zamiast "flash" - ten model działa zawsze.
+    const URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
 
     const response = await fetch(URL, {
       method: "POST",
@@ -39,29 +40,25 @@ exports.handler = async function(event, context) {
 
     const data = await response.json();
 
-    // === TUTAJ JEST ZMIANA - SPRAWDZAMY BŁĘDY ===
-    
-    // 1. Jeśli Google zwróciło błąd w JSON
+    // Sprawdzanie błędów
     if (data.error) {
         console.error("Google Error:", data.error);
         return { 
-            statusCode: 200, // Zwracamy 200 żeby frontend wyświetlił wiadomość
+            statusCode: 200, 
             headers, 
             body: JSON.stringify({ reply: `Błąd Google: ${data.error.message}` }) 
         };
     }
 
-    // 2. Jeśli sukces
     if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
       const botReply = data.candidates[0].content.parts[0].text;
       return { statusCode: 200, headers, body: JSON.stringify({ reply: botReply }) };
     }
 
-    // 3. Jeśli odpowiedź jest dziwna
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ reply: "Dostałem odpowiedź od Google, ale nie ma w niej tekstu. Zobacz logi Netlify." + JSON.stringify(data) }),
+      body: JSON.stringify({ reply: "Model nie zwrócił tekstu. Spróbuj zadać inne pytanie." }),
     };
 
   } catch (error) {
@@ -69,7 +66,7 @@ exports.handler = async function(event, context) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ reply: "Krytyczny błąd serwera: " + error.message }),
+      body: JSON.stringify({ reply: "Błąd serwera: " + error.message }),
     };
   }
 };
