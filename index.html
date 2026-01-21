@@ -252,6 +252,31 @@
 </div>
 
 <script>
+function toggleChat() {
+    const chatContainer = document.getElementById('chat-container');
+    const toggleBtn = document.getElementById('chat-toggle');
+    
+    if (chatContainer.classList.contains('hidden')) {
+        // Pokaż
+        chatContainer.classList.remove('hidden');
+        chatContainer.style.display = 'flex';
+        toggleBtn.innerHTML = '✖'; 
+    } else {
+        // Ukryj
+        chatContainer.classList.add('hidden');
+        setTimeout(() => { chatContainer.style.display = 'none'; }, 300);
+        toggleBtn.innerHTML = '💬';
+    }
+}
+
+// 2. Obsługa klawisza Enter
+function handleEnter(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+}
+
+// 3. Funkcja wysyłania (poprawiona)
 async function sendMessage() {
     const input = document.getElementById("chat-input");
     const log = document.getElementById("chat-window");
@@ -259,14 +284,17 @@ async function sendMessage() {
 
     if (!text) return;
 
-    // Twoja wiadomość
-    log.innerHTML += `<div style="margin: 5px 0; text-align: right;"><span style="background: #007bff; color: white; padding: 5px 10px; border-radius: 10px;">Ty: ${text}</span></div>`;
+    // Wyświetl wiadomość użytkownika (dymek)
+    log.innerHTML += `<div class="msg-user">${text}</div>`;
     input.value = "";
-    
-    // Scroll w dół
     log.scrollTop = log.scrollHeight;
 
     try {
+        // Efekt "pisania..."
+        const loadingId = "loading-" + Date.now();
+        log.innerHTML += `<div id="${loadingId}" class="msg-bot">...</div>`;
+        log.scrollTop = log.scrollHeight;
+
         const response = await fetch('/.netlify/functions/chatbot', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -276,20 +304,23 @@ async function sendMessage() {
         const data = await response.json();
         const botText = data.reply || "Coś poszło nie tak...";
         
-        // ZMIANA TUTAJ: Zamiast "AstroBot" jest "ChatBot"
-        log.innerHTML += `<div style="margin: 5px 0; text-align: left;"><span style="background: #444; color: white; padding: 5px 10px; border-radius: 10px;">ChatBot: ${botText}</span></div>`;
+        // Usuń "..." i wyświetl odpowiedź
+        document.getElementById(loadingId).remove();
+        
+        // Formatowanie nowych linii na <br>
+        const formattedText = botText.replace(/\n/g, '<br>');
+        log.innerHTML += `<div class="msg-bot">${formattedText}</div>`;
 
     } catch (e) {
         console.error(e);
-        log.innerHTML += `<div style="color: red;">Błąd połączenia z serwerem.</div>`;
+        log.innerHTML += `<div style="color: red; text-align: center; font-size: 0.8em;">Błąd połączenia z serwerem.</div>`;
     }
     
-    // Scroll w dół po odpowiedzi
     log.scrollTop = log.scrollHeight;
 }
 
 
-// ======= MINI-GALERIA =======
+// ======= MINI-GALERIA (Reszta Twojego kodu) =======
 const obrazki = [
     'kosmos1.png',
     'kosmos2.png',
@@ -302,11 +333,13 @@ const obrazki = [
 let index = 0;
 const imgElement = document.getElementById('galeria-img');
 
-// pokaż pierwszy obraz od razu
-imgElement.src = obrazki[0];
-imgElement.style.display = 'block';
+if(imgElement) {
+    imgElement.src = obrazki[0];
+    imgElement.style.display = 'block';
+}
 
 function zmienObrazek() {
+    if(!imgElement) return;
     imgElement.style.opacity = 0; // fade-out
     setTimeout(() => {
         imgElement.src = obrazki[index];
@@ -346,37 +379,39 @@ function formatCzasH(czasH) {
     return `${czasLata.toFixed(2)} lat`;
 }
 
-document.getElementById('licz').addEventListener('click', () => {
-    const cel = document.getElementById('cel').value;
-    let procentC = parseFloat(document.getElementById('procent').value);
-    let kmh = parseFloat(document.getElementById('kmh').value);
-    let ms = parseFloat(document.getElementById('ms').value);
+const btnLicz = document.getElementById('licz');
+if(btnLicz) {
+    btnLicz.addEventListener('click', () => {
+        const cel = document.getElementById('cel').value;
+        let procentC = parseFloat(document.getElementById('procent').value);
+        let kmh = parseFloat(document.getElementById('kmh').value);
+        let ms = parseFloat(document.getElementById('ms').value);
 
-    const C = 299792.458; // km/s
+        const C = 299792.458; // km/s
 
-    // Jeśli %C > 0, przeliczamy na km/h
-    if (procentC > 0) {
-        ms = (C * procentC / 100) * 1000; // m/s
-        kmh = ms * 3.6;
-    } else if (kmh > 0) {
-        ms = kmh / 3.6;
-        procentC = (ms / (C * 1000)) * 100;
-    } else if (ms > 0) {
-        kmh = ms * 3.6;
-        procentC = (ms / (C * 1000)) * 100;
-    }
+        if (procentC > 0) {
+            ms = (C * procentC / 100) * 1000;
+            kmh = ms * 3.6;
+        } else if (kmh > 0) {
+            ms = kmh / 3.6;
+            procentC = (ms / (C * 1000)) * 100;
+        } else if (ms > 0) {
+            kmh = ms * 3.6;
+            procentC = (ms / (C * 1000)) * 100;
+        }
 
-    const dystans = dystanse[cel]; // km
-    const czasH = dystans / kmh; // godziny
+        const dystans = dystanse[cel];
+        const czasH = dystans / kmh;
 
-    let wynikTekst = `Czas podróży do ${cel.charAt(0).toUpperCase() + cel.slice(1)}: ${formatCzasH(czasH)}`;
+        let wynikTekst = `Czas podróży do ${cel.charAt(0).toUpperCase() + cel.slice(1)}: ${formatCzasH(czasH)}`;
 
-    if (procentC > 100) {
-        wynikTekst += " (hipotetycznie, podróż z prędkością większą od prędkości światła nie jest możliwa)";
-    }
+        if (procentC > 100) {
+            wynikTekst += " (hipotetycznie, podróż z prędkością większą od prędkości światła nie jest możliwa)";
+        }
 
-    document.getElementById('wynik').textContent = wynikTekst;
-});
+        document.getElementById('wynik').textContent = wynikTekst;
+    });
+}
 </script>
 
 </body>
