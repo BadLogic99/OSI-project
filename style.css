@@ -335,145 +335,136 @@ body::before {
     color: #a8c3ff;
 }
 
-/* =========================================
-   KOSMICZNY CHATBOT - STYL DEDYKOWANY
-   ========================================= */
+/* --- CHATBOT STYLES --- */
+#chat-wrapper {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    font-family: sans-serif;
+}
 
-/* Kontener całości - pozycjonowanie nie jest tu konieczne, ale porządkuje kod */
-    #chat-wrapper {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 9999;
-        font-family: sans-serif;
-    }
+#chat-toggle {
+    background: #007bff;
+    color: white;
+    border: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-    /* Bąbelek (przycisk) */
-    #chat-toggle {
-        background: #007bff; /* Kolor przycisku */
-        color: white;
-        border: none;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        font-size: 30px;
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        transition: transform 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+#chat-toggle:hover {
+    transform: scale(1.1);
+}
 
-    #chat-toggle:hover {
-        transform: scale(1.1);
-    }
+#chat-container {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 350px;
+    height: 450px;
+    background: #1e1e1e;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #333;
+    transition: opacity 0.3s, transform 0.3s;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
 
-    /* Okno chatu */
-    #chat-container {
-        position: absolute;
-        bottom: 80px; /* Nad przyciskiem */
-        right: 0;
-        width: 350px;
-        height: 450px;
-        background: #1e1e1e; /* Ciemne tło */
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        border: 1px solid #333;
-        transition: opacity 0.3s, transform 0.3s;
-    }
+#chat-container.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+}
 
-    /* Klasa do ukrywania okna */
-    #chat-container.hidden {
-        display: none;
-        opacity: 0;
-        transform: translateY(20px);
-    }
+#chat-header {
+    background: #007bff;
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-    /* Nagłówek okna */
-    #chat-header {
-        background: #007bff;
-        color: white;
-        padding: 15px;
-        font-weight: bold;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+#close-chat {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
 
-    #close-chat {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 16px;
-        cursor: pointer;
-    }
+#chat-window {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #222;
+    color: #ddd;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-    /* Obszar wiadomości */
-    #chat-window {
-        flex: 1;
-        padding: 15px;
-        overflow-y: auto;
-        background: #222;
-        color: #ddd;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
+#chat-input-area {
+    padding: 10px;
+    background: #333;
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid #444;
+}
 
-    /* Obszar wpisywania */
-    #chat-input-area {
-        padding: 10px;
-        background: #333;
-        display: flex;
-        gap: 10px;
-    }
+#chat-input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #555;
+    background: #444;
+    color: white;
+    outline: none;
+}
 
-    #chat-input {
-        flex: 1;
-        padding: 10px;
-        border-radius: 20px;
-        border: 1px solid #555;
-        background: #444;
-        color: white;
-        outline: none;
-    }
+#send-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-    #send-btn {
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        cursor: pointer;
-        font-size: 18px;
-    }
+.msg-user {
+    align-self: flex-end;
+    background: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 15px 15px 0 15px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
 
-    #send-btn:hover {
-        background: #0056b3;
-    }
-
-    /* Style wiadomości (dymki) */
-    .msg-user {
-        align-self: flex-end;
-        background: #007bff;
-        color: white;
-        padding: 8px 12px;
-        border-radius: 15px 15px 0 15px;
-        max-width: 80%;
-        word-wrap: break-word;
-    }
-
-    .msg-bot {
-        align-self: flex-start;
-        background: #444;
-        color: white;
-        padding: 8px 12px;
-        border-radius: 15px 15px 15px 0;
-        max-width: 80%;
-        word-wrap: break-word;
-    }
+.msg-bot {
+    align-self: flex-start;
+    background: #444;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 15px 15px 15px 0;
+    max-width: 80%;
+    word-wrap: break-word;
+}
