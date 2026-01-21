@@ -1,1 +1,10 @@
 "*.php" 
+# Dokumenty Word
+*.doc
+*.docx
+*.pdf
+*.odt
+*.rtf
+
+# PDF
+*.pdf
