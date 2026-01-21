@@ -68,12 +68,12 @@ async function sendMessage() {
 
 // ======= MINI-GALERIA (Reszta Twojego kodu) =======
 const obrazki = [
-    'kosmos1.png',
-    'kosmos2.png',
-    'kosmos3.png',
-    'kosmos4.png',
-    'kosmos5.png',
-    'kosmos6.png'
+    'kosmos1.webp',
+    'kosmos2.webp',
+    'kosmos3.webp',
+    'kosmos4.webp',
+    'kosmos5.webp',
+    'kosmos6.webp'
 ];
 
 let index = 0;
