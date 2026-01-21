@@ -1,66 +1,76 @@
-// Otwieranie i zamykanie okna
-function toggleChat() {
-    const chatContainer = document.getElementById('chat-container');
-    const toggleBtn = document.getElementById('chat-toggle');
-    
-    if (chatContainer.classList.contains('hidden')) {
-        chatContainer.classList.remove('hidden');
-        chatContainer.style.display = 'flex'; // Pokaż flexem
-        toggleBtn.innerHTML = '✖'; // Zmień ikonę na X
-    } else {
-        chatContainer.classList.add('hidden');
-        setTimeout(() => { chatContainer.style.display = 'none'; }, 300); // Czekaj na animację
-        toggleBtn.innerHTML = '💬'; // Przywróć dymek
+exports.handler = async function(event, context) {
+  // 1. Nagłówki, żeby przeglądarka nie blokowała połączenia (CORS)
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS"
+  };
+
+  // Obsługa wstępnego zapytania przeglądarki
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 200, headers, body: "OK" };
+  }
+
+  try {
+    // 2. Walidacja danych wejściowych
+    const body = JSON.parse(event.body || "{}");
+    const userMessage = body.message;
+    const API_KEY = process.env.GOOGLE_API_KEY;
+
+    if (!API_KEY) {
+        return { statusCode: 500, headers, body: JSON.stringify({ reply: "BŁĄD: Brak klucza API w ustawieniach Netlify." }) };
     }
-}
 
-// Obsługa Entera
-function handleEnter(event) {
-    if (event.key === 'Enter') {
-        sendMessage();
+    if (!userMessage) {
+        return { statusCode: 400, headers, body: JSON.stringify({ reply: "Pusta wiadomość." }) };
     }
-}
 
-// Główna funkcja wysyłania (ZAKTUALIZOWANA)
-async function sendMessage() {
-    const input = document.getElementById("chat-input");
-    const log = document.getElementById("chat-window");
-    const text = input.value.trim();
+    // 3. Konfiguracja modelu - Wybraliśmy gemini-2.5-flash
+    const MODEL_NAME = "gemini-2.5-flash"; 
+    const URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
 
-    if (!text) return;
+    // 4. Zapytanie do Google
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{ text: userMessage }]
+        }]
+      })
+    });
 
-    // 1. Dodaj wiadomość użytkownika (nowy styl)
-    log.innerHTML += `<div class="msg-user">${text}</div>`;
-    input.value = "";
-    log.scrollTop = log.scrollHeight;
+    const data = await response.json();
 
-    try {
-        // Efekt "pisania" (opcjonalny bajer)
-        const loadingId = "loading-" + Date.now();
-        log.innerHTML += `<div id="${loadingId}" class="msg-bot">...</div>`;
-        log.scrollTop = log.scrollHeight;
-
-        const response = await fetch('/.netlify/functions/chatbot', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: text })
-        });
-
-        const data = await response.json();
-        const botText = data.reply || "Coś poszło nie tak...";
-
-        // Usuń kropki "..."
-        document.getElementById(loadingId).remove();
-
-        // 2. Dodaj odpowiedź bota (nowy styl)
-        // Zamieniamy \n na <br> żeby ładnie łamało linie
-        const formattedText = botText.replace(/\n/g, '<br>');
-        log.innerHTML += `<div class="msg-bot">${formattedText}</div>`;
-
-    } catch (e) {
-        console.error(e);
-        log.innerHTML += `<div style="color: red; font-size: 0.8em; text-align: center;">Błąd połączenia.</div>`;
+    // 5. Obsługa błędów Google
+    if (data.error) {
+        console.error("Google Error:", data.error);
+        return { 
+            statusCode: 200, 
+            headers, 
+            body: JSON.stringify({ reply: `Błąd modelu (${MODEL_NAME}): ${data.error.message}` }) 
+        };
     }
-    
-    log.scrollTop = log.scrollHeight;
-}
+
+    // 6. Wyciągnięcie odpowiedzi
+    if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+      const botReply = data.candidates[0].content.parts[0].text;
+      return { statusCode: 200, headers, body: JSON.stringify({ reply: botReply }) };
+    }
+
+    // 7. Fallback (gdyby odpowiedź była pusta)
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ reply: "Model milczy (brak tekstu w odpowiedzi)." }),
+    };
+
+  } catch (error) {
+    console.error("Critical Error:", error);
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ reply: "Błąd serwera: " + error.message }),
+    };
+  }
+};
