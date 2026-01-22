@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /.netlify/
+Sitemap: https://venerable-sundae-806da3.netlify.app/sitemap.xml
